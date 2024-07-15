@@ -4,14 +4,14 @@ Frontend do projeto Market, desenvolvido com Vue.js.
 
 ## Observações
 
-- Antes de rodar o projeto, é necessário que a api esteja rodando em localhost:8080 ([backend-market](https://github.com/jmarcos16/api-market)), certifique-se de que a api está rodando e configurada corretamente.
+- Antes de rodar o projeto, é necessário que a api esteja rodando em localhost:8080 ([backend-market](https://github.com/jmarcos16/des-api)), certifique-se de que a api está rodando e configurada corretamente.
 
 ## Requisitos
 
 - Node.js 16 ou superior
 - npm ou yarn
 - http-server
-- api rodando em localhost:8080 ([backend-market](https://github.com/jmarcos16/api-market))
+- api rodando em localhost:8080 ([backend-market](https://github.com/jmarcos16/des-api))
 
 ## Utilização
 
