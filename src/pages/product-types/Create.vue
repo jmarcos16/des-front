@@ -1,0 +1,89 @@
+<script setup>
+import { ref, onMounted } from "vue";
+import api from "../../services/api";
+import Button from "../../components/Button.vue";
+import { useRouter } from "vue-router";
+import Link from "../../components/Link.vue";
+import { Form, Field, ErrorMessage } from "vee-validate";
+import * as yup from "yup";
+import { component as VueNumber } from '@coders-tm/vue-number-format'
+
+const router = useRouter();
+const percentage = ref('%0');
+const field = ref(null);
+const number = ref({
+    prefix: '%',
+    precision: 2,
+    masked: true,
+});
+
+const handleChange = (value) => {
+    percentage.value = value;
+};
+
+const handleBlur = (value) => {
+    percentage.value = value;
+};
+
+const schema = yup.object({
+    name: yup.string().required("O nome é obrigatório"),
+    percentage: yup.string().required("O percentual é obrigatório"),
+});
+
+const handleSubmit = async (values) => {
+    try {
+        await api.post("product-types", {
+            name: values.name,
+            tax_percent: values.percentage.replace('%', ''),
+        });
+        router.push("/product-types");
+    } catch (error) {
+        console.error(error);
+    }
+};
+</script>
+<template>
+    <div class="py-12">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="p-8 bg-white shadow rounded-lg">
+                    <div class=" space-y-4">
+                        <header>
+                            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                Informações do tipo de produto
+                            </h2>
+                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                Preencha os campos abaixo para adicionar um novo tipo de produto.
+                            </p>
+                        </header>
+                        <Form @submit="handleSubmit" :validation-schema="schema">
+                            <div class="grid grid-cols-1 gap-6">
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-700">Nome</label>
+                                    <Field name="name" type="name" class="border border-gray-200 rounded-lg px-4 py-2 w-full" />
+                                    <ErrorMessage name="name" class="text-red-500 text-sm" />
+                                </div>
+                                <div>
+                                    <label for="price" class="block text-sm font-medium text-gray-700">Percentual de imposto</label>
+                                    <Field name="percentage" v-model="percentage" type="percentage" v-slot="{ handleChange, handleBlur }">
+                                        <VueNumber
+                                            class="border border-gray-200 rounded-lg px-4 py-2 w-full"
+                                            name="percentage"
+                                            v-bind="number"
+                                            :modelValue="percentage"
+                                            @change="handleChange"
+                                            @blur="handleBlur"
+                                        />
+                                    </Field>
+                                    <ErrorMessage name="percentage" class="text-red-500 text-sm" />
+                                </div>
+                            </div>
+                            <div class="mt-8 f flex justify-between">
+                                <Link url="/product-types">Cancelar</Link>
+                                <Button type="submit">Adicionar produto</Button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+        </div>
+    </div>
+</template>
